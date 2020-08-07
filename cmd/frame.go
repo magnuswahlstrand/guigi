@@ -4,13 +4,14 @@ import (
 	"fmt"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	widgets2 "github.com/kyeett/gooigi/cmd/widgets"
 )
 
 func nextLine() {
 	y += wHeight + wPaddingY
 }
 
-var widgets []Widget
+var widgets []widgets2.Widget
 
 func resetX() {
 	x = pLeft + 300
@@ -23,6 +24,11 @@ func resetY() {
 func newFrame() {
 	resetX()
 	resetY()
+
+	deleteTimer--
+	blinkingTimer--
+
+	fmt.Println(deleteTimer, blinkingTimer)
 }
 
 func endFrame(screen *ebiten.Image) {
@@ -31,5 +37,5 @@ func endFrame(screen *ebiten.Image) {
 	for _, w := range widgets {
 		w.Draw(screen)
 	}
-	widgets = []Widget{}
+	widgets = []widgets2.Widget{}
 }

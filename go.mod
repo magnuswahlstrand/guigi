@@ -13,5 +13,3 @@ require (
 )
 
 replace github.com/kyeett/games => ../games
-
-replace github.com/hajimehoshi/ebiten => ../../hajimehoshi/ebiten

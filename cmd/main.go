@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/gabstv/ebiten-imgui/renderer"
 	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
@@ -41,6 +42,10 @@ type Game struct {
 	manager    *renderer.Manager
 	floatVar   float32
 	floatVar64 float64
+
+	text1, text2 string
+	c1           [4]float32
+	c2           [4]float32
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -49,27 +54,56 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 
 func (g *Game) Update(_ *ebiten.Image) error {
 	mouse.update()
+	updatePressedCharacters()
 	g.manager.Update(float32(0.1), windowWidth, windowHeight)
 	return nil
 }
 
+var keysPressed string
+
 func (g *Game) Draw(screen *ebiten.Image) {
 	newFrame()
-	if uiButton("button") {
+
+	if UiInputText("some label1", &g.text1) {
+		fmt.Println("label1 changed", g.text1)
+	}
+	if UiInputText("some label2", &g.text2) {
+		fmt.Println("label2 changed", g.text2)
+	}
+	if UiButton("button") {
 		ebitenutil.DebugPrint(screen, "Button clicked")
 	}
-	if uiButton("button2") {
+	if UiButton("button2") {
 		ebitenutil.DebugPrint(screen, "Button clicked")
 	}
-	if uiDragFloat("my float", &g.floatVar64) {
+	if UiDragFloat("my float", &g.floatVar64) {
 		ebitenutil.DebugPrint(screen, "Slider moved")
 	}
 	endFrame(screen)
 
 	g.manager.BeginFrame()
+
+	f1 := func() {
+		if imgui.InputText("some label1", &g.text1) {
+			fmt.Println("label1 changed", g.text1)
+		}
+		//imgui.ColorEdit4("color1", &g.c1)
+	}
+
+	f2 := func() {
+		if imgui.InputText("some label2", &g.text2) {
+			fmt.Println("label2 changed")
+		}
+		//imgui.ColorEdit4("color2", &g.c2)
+	}
+
+	f1()
+	f2()
+
 	if imgui.Button("button") {
 		ebitenutil.DebugPrint(screen, "Button clicked")
 	}
+
 	if imgui.Button("button2") {
 		ebitenutil.DebugPrint(screen, "Button clicked")
 	}
@@ -94,8 +128,16 @@ const (
 	wPaddingX = 1
 )
 
-func rect(x, y, w, h float64) gfx.Rect {
-	return gfx.R(0, 0, w, h).Moved(gfx.V(x, y))
+func GetRect() gfx.Rect {
+	return gfx.R(0, 0, wWidth, wHeight).Moved(gfx.V(x, y))
+}
+
+func GetRectWide(w float64) gfx.Rect {
+	return gfx.R(0, 0, w, wHeight).Moved(gfx.V(x, y))
+}
+
+func GetXY() (float64, float64) {
+	return x, y
 }
 
 type Widget interface {
@@ -114,6 +156,12 @@ func main() {
 		manager:    mgr,
 		floatVar:   0.0,
 		floatVar64: 0.0,
+
+		text1: "magnus",
+		text2: "rui",
+
+		c1: [4]float32{1, 1, 1, 1},
+		c2: [4]float32{1, 1, 1, 1},
 	}
 
 	ebiten.RunGame(g)
