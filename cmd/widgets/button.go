@@ -7,6 +7,8 @@ import (
 	"github.com/peterhellberg/gfx"
 )
 
+var _ Widget = &Button{}
+
 type Button struct {
 	Label string
 	Rect  gfx.Rect

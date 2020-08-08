@@ -8,6 +8,8 @@ import (
 	"github.com/peterhellberg/gfx"
 )
 
+var _ Widget = &DragFloat{}
+
 type DragFloat struct {
 	Label string
 	Rect  gfx.Rect

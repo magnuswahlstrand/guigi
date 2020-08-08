@@ -5,6 +5,8 @@ import (
 	"github.com/kyeett/gooigi/cmd/text"
 )
 
+var _ Widget = &Label{}
+
 type Label struct {
 	Label string
 	X, Y  float64

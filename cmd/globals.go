@@ -1,22 +1,27 @@
 package main
 
-import "github.com/hajimehoshi/ebiten"
+import (
+	"github.com/hajimehoshi/ebiten"
+)
 
 var (
-	activeLabel = ""
+	focusedLabel = ""
 
-	blinkingTimer    = 0
-	blinkingTimerMax = 5
+	blinkingTimer = 0
 
 	deleteTimer    = 0
 	deleteTimerMax = 10
 	deleteTimerMin = 4
+
+	keepSameLine bool
+
+	activeList = map[string]bool{}
 )
 
-func setActiveLabel(label string) {
-	if activeLabel != label {
+func setFocused(label string) {
+	if focusedLabel != label {
 		// New widget
-		activeLabel = label
+		focusedLabel = label
 
 		// Reset timers
 		blinkingTimer = 0
@@ -24,9 +29,21 @@ func setActiveLabel(label string) {
 	}
 }
 
+func isFocused(label string) bool {
+	return label == focusedLabel
+}
+
 func updatePressedCharacters() {
 	keysPressed = ""
 	for _, r := range ebiten.InputChars() {
 		keysPressed += string(r)
 	}
+}
+
+func setActive(typ string, label string, state bool) {
+	activeList[typ+label] = state
+}
+
+func isActive(typ string, label string) bool {
+	return activeList[typ+label]
 }
