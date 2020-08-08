@@ -13,10 +13,20 @@ var (
 	deleteTimerMax = 10
 	deleteTimerMin = 4
 
-	keepSameLine bool
+	nextNoNewLine  bool
+	nextNoPaddingY bool
 
-	activeList = map[string]bool{}
+	activeList   = map[string]bool{}
+	selectedList = map[string]int{}
+
+	currentListBox      = ""
+	currentListBoxIndex = -1
 )
+
+func getCurrentIndex() int {
+	currentListBoxIndex++
+	return currentListBoxIndex
+}
 
 func setFocused(label string) {
 	if focusedLabel != label {
@@ -46,4 +56,21 @@ func setActive(typ string, label string, state bool) {
 
 func isActive(typ string, label string) bool {
 	return activeList[typ+label]
+}
+
+func setSelectedIndex(typ string, label string, index int) {
+	selectedList[typ+label] = index
+}
+
+func isSelectedIndex(typ string, label string, index int) bool {
+	currentIndex, found := selectedList[typ+label]
+	return found && (currentIndex == index)
+}
+
+func sameLine() {
+	nextNoNewLine = true
+}
+
+func noPaddingY() {
+	nextNoPaddingY = true
 }

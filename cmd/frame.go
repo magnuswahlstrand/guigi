@@ -10,7 +10,13 @@ import (
 
 func nextLine() {
 	resetX()
-	y += wHeight + wPaddingY
+
+	y += wHeight
+	if nextNoPaddingY {
+		nextNoPaddingY = false
+	} else {
+		y += wPaddingY
+	}
 }
 
 var widgets []widgets2.Widget
@@ -30,7 +36,10 @@ func newFrame() {
 	deleteTimer--
 	blinkingTimer++
 
-	keepSameLine = false
+	nextNoNewLine = false
+	nextNoPaddingY = false
+
+	currentListBox = ""
 }
 
 func endFrame(screen *ebiten.Image) {
@@ -45,25 +54,31 @@ func endFrame(screen *ebiten.Image) {
 func addWidget(w widgets2.Widget) {
 	widgets = append(widgets, w)
 
-	if !keepSameLine {
+	if !nextNoNewLine {
 		nextLine()
 	}
 
 	// Reset
-	keepSameLine = false
+	nextNoNewLine = false
 }
 
-func AllocateRect() gfx.Rect {
-	return AllocateWideRect(wWidth)
+func allocateRect() gfx.Rect {
+	return allocateRectW(wWidth)
 }
 
-func AllocateWideRect(w float64) gfx.Rect {
+func allocateRectW(w float64) gfx.Rect {
 	r := gfx.R(0, 0, w, wHeight).Moved(gfx.V(x, y))
 	x += w + wPaddingX
 	return r
 }
 
-func AllocateXY() (float64, float64) {
+func allocateRectH(h float64) gfx.Rect {
+	r := gfx.R(0, 0, wWidth, h).Moved(gfx.V(x, y))
+	x += wWidth + wPaddingX
+	return r
+}
+
+func allocateXY() (float64, float64) {
 	x += wPaddingX
 	return x, y
 }

@@ -10,7 +10,7 @@ type Widget interface {
 }
 
 var (
-	colorBlue        = color.RGBA{26, 66, 114, 255}
-	colorPressedBlue = color.RGBA{38, 130, 255, 255}
-	colorHoveredBlue = color.RGBA{0, 140, 251, 255}
+	colorBlue        = color.RGBA{22, 41, 65, 255}
+	colorPressedBlue = color.RGBA{21, 70, 120, 255}
+	colorHoveredBlue = color.RGBA{12, 114, 203, 255}
 )

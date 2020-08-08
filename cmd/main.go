@@ -38,9 +38,10 @@ func init() {
 }
 
 type Game struct {
-	manager    *renderer.Manager
-	floatVar   float32
-	floatVar64 float64
+	manager      *renderer.Manager
+	floatVar     float32
+	floatVar64   float64
+	exampleIndex int32
 
 	text1 string
 	c1    [4]float32
@@ -79,6 +80,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	if UiDragFloat("my float", &g.floatVar64) {
 		ebitenutil.DebugPrint(screen, "Slider moved")
 	}
+
+	UiBeginListBox("my list box")
+	if UiSelectable("pulsating dot") {
+		fmt.Println("pulsating dot selected")
+	}
+	if UiSelectable("fire") {
+		fmt.Println("fire selected")
+	}
+	UiEndListBox()
+
 	endFrame(screen)
 
 	g.manager.BeginFrame()
@@ -98,6 +109,15 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	if imgui.DragFloat("my float", &g.floatVar) {
 		ebitenutil.DebugPrint(screen, "Slider moved")
+	}
+
+	if imgui.ListBox("", &g.exampleIndex, []string{"pulsating dot", "fire"}) {
+		switch g.exampleIndex {
+		case 0:
+			fmt.Println("Pulsating")
+		case 1:
+			fmt.Println("Fire")
+		}
 	}
 	g.manager.EndFrame(screen)
 }

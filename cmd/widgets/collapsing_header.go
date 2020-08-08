@@ -6,6 +6,7 @@ import (
 	"github.com/kyeett/games/util"
 	"github.com/kyeett/gooigi/cmd/text"
 	"github.com/peterhellberg/gfx"
+	"math"
 )
 
 var (
@@ -32,7 +33,8 @@ type CollapsingHeader struct {
 	Label string
 	Rect  gfx.Rect
 
-	Hovered bool
+	Hovered   bool
+	Collapsed bool
 }
 
 func (w *CollapsingHeader) Draw(screen *ebiten.Image) {
@@ -44,6 +46,11 @@ func (w *CollapsingHeader) Draw(screen *ebiten.Image) {
 	}
 
 	opt := &ebiten.DrawImageOptions{}
+	if !w.Collapsed {
+		opt.GeoM.Translate(-arrowWidth/2, -arrowHeight/2)
+		opt.GeoM.Rotate(math.Pi / 2)
+		opt.GeoM.Translate(arrowWidth/2, arrowHeight/2)
+	}
 	opt.GeoM.Translate(w.Rect.Min.X+arrowPaddingLeft, w.Rect.Min.Y+(w.Rect.H()-arrowHeight)/2)
 	screen.DrawImage(arrowImage, opt)
 
