@@ -31,7 +31,7 @@ func (g *Game) Update(_ *ebiten.Image) error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	imgui2.NewFrame()
+	imgui2.BeginFrame(300,100)
 
 	if imgui2.CollapsingHeader("experiment") {
 		if imgui2.Button("inside experiment") {

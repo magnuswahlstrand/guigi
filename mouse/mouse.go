@@ -50,6 +50,10 @@ func JustReleased() bool {
 	return mse.justReleased
 }
 
+func Pressed() bool {
+	return mse.pressed
+}
+
 func JustPressed() bool {
 	return mse.justPressed
 }

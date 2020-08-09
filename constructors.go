@@ -92,7 +92,7 @@ func DragFloat(label string, v *float64) bool {
 	r := allocateRect()
 
 	s := mouse.MouseStateRect(r)
-	dragged := mouse.Dragged() && s.StartedIn()
+	dragged := mouse.Pressed() && s.StartedIn()
 
 	// Update if needed
 	if dragged && mouse.Dragged() {

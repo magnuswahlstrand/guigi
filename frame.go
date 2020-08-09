@@ -11,9 +11,6 @@ import (
 const (
 	pTop  = 20 + 10
 	pLeft = 10
-	// TODO: Used during prototyping, should be removed
-	devOffsetX = 300
-	devOffsetY = 100
 	frameWidth = 250
 	wHeight    = 20
 	wWidth     = 100
@@ -34,69 +31,15 @@ func nextLine() {
 }
 
 func resetX() {
-	x = pLeft + devOffsetX
+	x = f.x + pLeft
 }
 
 var widgets []widgets2.Widget
 
-type frameDimensions struct {
-	x, y float64
-	w, h float64
-}
+func BeginFrame(fx, fy float64) {
+	x = fx
+	y = fy
 
-func (d *frameDimensions) colX(col int) float64 {
-	switch col {
-	case 0:
-		return 0
-	case 1:
-		return cw
-	case 2:
-		return d.w - cw
-	}
-	log.Fatal("invalid col")
-	return -1
-}
-
-func (d *frameDimensions) rowY(row int) float64 {
-	switch row {
-	case 0:
-		return 0
-	case 1:
-		return ch
-	case 2:
-		return d.h - ch
-	}
-	log.Fatal("invalid row")
-	return -1
-}
-
-func (d *frameDimensions) translate(row, col int) *ebiten.DrawImageOptions {
-	opt := &ebiten.DrawImageOptions{}
-	opt.GeoM.Translate(f.x, f.y)
-
-	opt.GeoM.Translate(d.colX(col), d.rowY(row))
-	return opt
-}
-
-func (d *frameDimensions) translateExisting(opt *ebiten.DrawImageOptions, row, col int) *ebiten.DrawImageOptions {
-	opt.GeoM.Translate(f.x, f.y)
-	opt.GeoM.Translate(d.colX(col), d.rowY(row))
-	return opt
-}
-
-func (d *frameDimensions) midWidth() float64 {
-	return d.w - cw*2
-}
-
-func (d *frameDimensions) midHeight() float64 {
-	return d.h - ch*2
-}
-
-var f frameDimensions
-
-func NewFrame() {
-	x = devOffsetX
-	y = devOffsetY
 	f.x = x
 	f.y = y
 
@@ -157,6 +100,61 @@ func EndFrame(screen *ebiten.Image) {
 		w.Draw(screen)
 	}
 }
+
+type frameDimensions struct {
+	x, y float64
+	w, h float64
+}
+
+func (d *frameDimensions) colX(col int) float64 {
+	switch col {
+	case 0:
+		return 0
+	case 1:
+		return cw
+	case 2:
+		return d.w - cw
+	}
+	log.Fatal("invalid col")
+	return -1
+}
+
+func (d *frameDimensions) rowY(row int) float64 {
+	switch row {
+	case 0:
+		return 0
+	case 1:
+		return ch
+	case 2:
+		return d.h - ch
+	}
+	log.Fatal("invalid row")
+	return -1
+}
+
+func (d *frameDimensions) translate(row, col int) *ebiten.DrawImageOptions {
+	opt := &ebiten.DrawImageOptions{}
+	opt.GeoM.Translate(f.x, f.y)
+
+	opt.GeoM.Translate(d.colX(col), d.rowY(row))
+	return opt
+}
+
+func (d *frameDimensions) translateExisting(opt *ebiten.DrawImageOptions, row, col int) *ebiten.DrawImageOptions {
+	opt.GeoM.Translate(f.x, f.y)
+	opt.GeoM.Translate(d.colX(col), d.rowY(row))
+	return opt
+}
+
+func (d *frameDimensions) midWidth() float64 {
+	return d.w - cw*2
+}
+
+func (d *frameDimensions) midHeight() float64 {
+	return d.h - ch*2
+}
+
+var f frameDimensions
 
 func addWidget(w widgets2.Widget) {
 	widgets = append(widgets, w)
