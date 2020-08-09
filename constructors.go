@@ -87,7 +87,7 @@ func tryUpdateInput(variable *string) bool {
 	return false
 }
 
-func UiDragFloat(label string, v *float64) bool {
+func DragFloat(label string, v *float64) bool {
 	stepSize := 0.1
 	r := allocateRect()
 
@@ -125,7 +125,7 @@ func UiDragFloat(label string, v *float64) bool {
 	return dragged && mouse.Dragged()
 }
 
-func UiButton(label string) bool {
+func Button(label string) bool {
 	bb := text2.BoundingBoxFromString(label, text.DefaultFont)
 	r := allocateRectW(bb.W() + 8)
 	over, startedIn, isPressed, isHovered := mouse.MouseState(r)
@@ -142,7 +142,7 @@ func UiButton(label string) bool {
 	return mouse.JustReleased() && over && startedIn
 }
 
-func UiCollapsingHeader(label string) bool {
+func CollapsingHeader(label string) bool {
 	r := allocateRect()
 	//over, startedIn, _, isHovered := mouse.MouseStateRect(r)
 	s := mouse.MouseStateRect(r)
@@ -170,12 +170,12 @@ func UiCollapsingHeader(label string) bool {
 	return expanded
 }
 
-func UiBeginListBox(label string) {
+func BeginListBox(label string) {
 	currentListBox = label
 	currentListBoxIndex = -1
 }
 
-func UiEndListBox() {
+func EndListBox() {
 	// Add empty bottom rectangle
 	r := allocateRectH(6)
 	w := &widgets2.Rectangle{
@@ -187,7 +187,7 @@ func UiEndListBox() {
 	currentListBoxIndex = -1
 }
 
-func UiSelectable(itemLabel string) bool {
+func Selectable(itemLabel string) bool {
 	index := getCurrentIndex()
 
 	//var selected bool

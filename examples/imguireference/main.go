@@ -33,8 +33,8 @@ func (g *Game) Update(_ *ebiten.Image) error {
 func (g *Game) Draw(screen *ebiten.Image) {
 	imgui2.NewFrame()
 
-	if imgui2.UiCollapsingHeader("experiment") {
-		if imgui2.UiButton("inside experiment") {
+	if imgui2.CollapsingHeader("experiment") {
+		if imgui2.Button("inside experiment") {
 			ebitenutil.DebugPrint(screen, "Button clicked")
 		}
 	}
@@ -42,22 +42,22 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	if imgui2.UiInputText("some label2", &g.text1) {
 		fmt.Println("label2 changed", g.text1)
 	}
-	if imgui2.UiButton("button") {
+	if imgui2.Button("button") {
 		ebitenutil.DebugPrint(screen, "Button clicked")
 	}
 
-	if imgui2.UiDragFloat("my float", &g.floatVar64) {
+	if imgui2.DragFloat("my float", &g.floatVar64) {
 		ebitenutil.DebugPrint(screen, "Slider moved")
 	}
 
-	imgui2.UiBeginListBox("my list box")
-	if imgui2.UiSelectable("pulsating dot") {
+	imgui2.BeginListBox("my list box")
+	if imgui2.Selectable("pulsating dot") {
 		fmt.Println("pulsating dot selected")
 	}
-	if imgui2.UiSelectable("fire") {
+	if imgui2.Selectable("fire") {
 		fmt.Println("fire selected")
 	}
-	imgui2.UiEndListBox()
+	imgui2.EndListBox()
 	imgui2.EndFrame(screen)
 
 	g.manager.BeginFrame()
