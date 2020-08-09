@@ -39,6 +39,16 @@ func setFocused(label string) {
 	}
 }
 
+func setUnfocused(label string) {
+	if focusedLabel == label {
+		focusedLabel = ""
+
+		// Reset timers
+		blinkingTimer = 0
+		deleteTimer = 0
+	}
+}
+
 func isFocused(label string) bool {
 	return label == focusedLabel
 }

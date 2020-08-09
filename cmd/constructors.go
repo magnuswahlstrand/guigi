@@ -4,17 +4,22 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 	text2 "github.com/kyeett/games/util/text"
+	"github.com/kyeett/gooigi/cmd/text"
 	widgets2 "github.com/kyeett/gooigi/cmd/widgets"
-	"github.com/peterhellberg/gfx"
 )
 
 func UiInputText(label string, variable *string) bool {
 	r := allocateRect()
-	_, _, isPressed, _ := mouseState(r)
+	//_, _, isPressed, _ := mouseState(r)
+	s := mouseStateRect(r)
 
 	// Check if widget clicked this turn
-	if isPressed {
+
+	switch {
+	case s.pressed():
 		setFocused(label)
+	case mouse.justPressed: //&& s.pressed(): This is already implicit by previous case
+		setUnfocused(label)
 	}
 
 	// If widget is current focused, handle key presses
@@ -49,45 +54,6 @@ func UiInputText(label string, variable *string) bool {
 func shouldShowBlinker() bool {
 	// Last delete happened too recently
 	return blinkingTimer/30%2 == 0
-}
-
-func mouseState(r gfx.Rect) (bool, bool, bool, bool) {
-	startedIn := r.Contains(mouse.start)
-	over := r.Contains(mouse.current)
-	isPressed := over && mouse.pressed && startedIn
-	isHovered := (over && !mouse.pressed) || isPressed
-	return over, startedIn, isPressed, isHovered
-}
-
-// TODO: rename
-type mouseStateStruct struct {
-	gfx.Rect
-}
-
-func (m *mouseStateStruct) startedIn() bool {
-	return m.Contains(mouse.start)
-}
-
-func (m *mouseStateStruct) over() bool {
-	return m.Contains(mouse.current)
-}
-
-func (m *mouseStateStruct) pressed() bool {
-	return mouse.pressed && m.over() && m.startedIn()
-}
-
-func (m *mouseStateStruct) hovered() bool {
-	return m.over() && (!mouse.pressed) || (mouse.pressed && m.startedIn())
-}
-
-func (m *mouseStateStruct) up() bool {
-	return mouse.justReleased && m.over() && m.startedIn()
-}
-
-func mouseStateRect(r gfx.Rect) mouseStateStruct {
-	return mouseStateStruct{
-		Rect: r,
-	}
 }
 
 func tryUpdateInput(variable *string) bool {
@@ -159,7 +125,7 @@ func UiDragFloat(label string, v *float64) bool {
 }
 
 func UiButton(label string) bool {
-	bb := text2.BoundingBoxFromString(label, usedFont)
+	bb := text2.BoundingBoxFromString(label, text.DefaultFont)
 	r := allocateRectW(bb.W() + 8)
 	over, startedIn, isPressed, isHovered := mouseState(r)
 

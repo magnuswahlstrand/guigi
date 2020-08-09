@@ -3,6 +3,7 @@ package widgets
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/kyeett/gooigi/cmd/constants"
 	"github.com/peterhellberg/gfx"
 )
 
@@ -13,5 +14,5 @@ type Rectangle struct {
 }
 
 func (w *Rectangle) Draw(screen *ebiten.Image) {
-	ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorBlue)
+	ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorBlue)
 }

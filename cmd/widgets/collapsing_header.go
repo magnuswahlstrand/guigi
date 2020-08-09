@@ -4,6 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/kyeett/games/util"
+	"github.com/kyeett/gooigi/cmd/constants"
 	"github.com/kyeett/gooigi/cmd/text"
 	"github.com/peterhellberg/gfx"
 	"math"
@@ -40,9 +41,9 @@ type CollapsingHeader struct {
 func (w *CollapsingHeader) Draw(screen *ebiten.Image) {
 	switch {
 	case w.Hovered:
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorHoveredBlue)
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorHoveredBlue)
 	default:
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorBlue)
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorBlue)
 	}
 
 	opt := &ebiten.DrawImageOptions{}

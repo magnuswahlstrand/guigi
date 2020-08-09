@@ -4,6 +4,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	text2 "github.com/kyeett/games/util/text"
+	"github.com/kyeett/gooigi/cmd/constants"
 	"github.com/kyeett/gooigi/cmd/text"
 	"github.com/peterhellberg/gfx"
 	"golang.org/x/image/colornames"
@@ -23,9 +24,9 @@ type InputText struct {
 
 func (w *InputText) Draw(screen *ebiten.Image) {
 	if w.Focused {
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorHoveredBlue)
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorHoveredBlue)
 	} else {
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorBlue)
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorBlue)
 	}
 
 	text.DrawAt(screen, *w.Variable, text.DefaultFont, w.Rect.Min.X, w.Rect.Min.Y)

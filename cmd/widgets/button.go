@@ -3,6 +3,7 @@ package widgets
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
+	"github.com/kyeett/gooigi/cmd/constants"
 	"github.com/kyeett/gooigi/cmd/text"
 	"github.com/peterhellberg/gfx"
 )
@@ -20,11 +21,11 @@ type Button struct {
 func (w *Button) Draw(screen *ebiten.Image) {
 	switch {
 	case w.Pressed:
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorPressedBlue)
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorPressedBlue)
 	case w.Hovered:
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorHoveredBlue)
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorHoveredBlue)
 	default:
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), colorBlue)
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorBlue)
 	}
 
 	text.DrawAt(screen, w.Label, text.DefaultFont, w.Rect.Min.X, w.Rect.Min.Y)

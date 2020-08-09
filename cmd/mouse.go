@@ -47,3 +47,46 @@ func (m *Mouse) diffToCurrent() gfx.Vec {
 func (m *Mouse) diffToPrevious() gfx.Vec {
 	return m.previous.Sub(m.start)
 }
+
+func mouseState(r gfx.Rect) (bool, bool, bool, bool) {
+	startedIn := r.Contains(mouse.start)
+	over := r.Contains(mouse.current)
+	isPressed := over && mouse.pressed && startedIn
+	isHovered := (over && !mouse.pressed) || isPressed
+	return over, startedIn, isPressed, isHovered
+}
+
+// TODO: rename
+type mouseStateStruct struct {
+	gfx.Rect
+}
+
+func (m *mouseStateStruct) startedIn() bool {
+	return m.Contains(mouse.start)
+}
+
+func (m *mouseStateStruct) over() bool {
+	return m.Contains(mouse.current)
+}
+
+func (m *mouseStateStruct) pressed() bool {
+	return mouse.pressed && m.over() && m.startedIn()
+}
+
+func (m *mouseStateStruct) hovered() bool {
+	return m.over() && (!mouse.pressed) || (mouse.pressed && m.startedIn())
+}
+
+func (m *mouseStateStruct) up() bool {
+	return mouse.justReleased && m.over() && m.startedIn()
+}
+
+func (m *mouseStateStruct) upOutside() bool {
+	return mouse.justReleased && !m.over() && !m.startedIn()
+}
+
+func mouseStateRect(r gfx.Rect) mouseStateStruct {
+	return mouseStateStruct{
+		Rect: r,
+	}
+}

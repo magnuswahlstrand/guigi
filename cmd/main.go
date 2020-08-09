@@ -3,39 +3,15 @@ package main
 import (
 	"fmt"
 	"github.com/gabstv/ebiten-imgui/renderer"
-	"github.com/golang/freetype/truetype"
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/hajimehoshi/ebiten/examples/resources/fonts"
 	"github.com/inkyblackness/imgui-go/v2"
-	"golang.org/x/image/font"
-	"image/color"
-	"log"
 )
 
 var (
-	usedFont font.Face
-
-	x, y             float64
-	mouse            Mouse
-	colorBlue        color.Color
-	colorHoveredBlue color.Color
-	colorPressedBlue color.Color
+	x, y  float64
+	mouse Mouse
 )
-
-func init() {
-	tt, err := truetype.Parse(fonts.MPlus1pRegular_ttf)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	const dpi = 72
-	usedFont = truetype.NewFace(tt, &truetype.Options{
-		Size:    12,
-		DPI:     dpi,
-		Hinting: font.HintingFull,
-	})
-}
 
 type Game struct {
 	manager      *renderer.Manager
@@ -128,24 +104,20 @@ const (
 )
 
 const (
-	pTop    = 10
-	pLeft   = 10
-	wHeight = 20
-	wWidth  = 100
+	pTop  = 20 + 10
+	pLeft = 10
+	// TODO: Used during prototyping, should be removed
+	devOffsetX = 300
+	devOffsetY = 100
+	frameWidth = 250
+	wHeight    = 20
+	wWidth     = 100
 
 	wPaddingY = 5
 	wPaddingX = 1
 )
 
-type Widget interface {
-	Draw(screen *ebiten.Image)
-}
-
 func main() {
-	colorBlue = color.RGBA{26, 66, 114, 255}
-	colorPressedBlue = color.RGBA{38, 130, 255, 255}
-	colorHoveredBlue = color.RGBA{0, 140, 251, 255}
-
 	mgr := renderer.New(nil)
 	ebiten.SetWindowSize(windowWidth, windowHeight)
 

@@ -6,6 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	widgets2 "github.com/kyeett/gooigi/cmd/widgets"
 	"github.com/peterhellberg/gfx"
+	"log"
 )
 
 func nextLine() {
@@ -19,19 +20,75 @@ func nextLine() {
 	}
 }
 
+func resetX() {
+	x = pLeft + devOffsetX
+}
+
 var widgets []widgets2.Widget
 
-func resetX() {
-	x = pLeft + 300
+type frameDimensions struct {
+	x, y float64
+	w, h float64
 }
 
-func resetY() {
-	y = pTop + 100
+func (d *frameDimensions) colX(col int) float64 {
+	switch col {
+	case 0:
+		return 0
+	case 1:
+		return cw
+	case 2:
+		return d.w - cw
+	}
+	log.Fatal("invalid col")
+	return -1
 }
+
+func (d *frameDimensions) rowY(row int) float64 {
+	switch row {
+	case 0:
+		return 0
+	case 1:
+		return ch
+	case 2:
+		return d.h - ch
+	}
+	log.Fatal("invalid row")
+	return -1
+}
+
+func (d *frameDimensions) translate(row, col int) *ebiten.DrawImageOptions {
+	opt := &ebiten.DrawImageOptions{}
+	opt.GeoM.Translate(f.x, f.y)
+
+	opt.GeoM.Translate(d.colX(col), d.rowY(row))
+	return opt
+}
+
+func (d *frameDimensions) translateExisting(opt *ebiten.DrawImageOptions, row, col int) *ebiten.DrawImageOptions {
+	opt.GeoM.Translate(f.x, f.y)
+	opt.GeoM.Translate(d.colX(col), d.rowY(row))
+	return opt
+}
+
+func (d *frameDimensions) midWidth() float64 {
+	return d.w - cw*2
+}
+
+func (d *frameDimensions) midHeight() float64 {
+	return d.h - ch*2
+}
+
+var f frameDimensions
 
 func newFrame() {
-	resetX()
-	resetY()
+	x = devOffsetX
+	y = devOffsetY
+	f.x = x
+	f.y = y
+
+	x += pLeft
+	y += pTop
 
 	deleteTimer--
 	blinkingTimer++
@@ -40,15 +97,52 @@ func newFrame() {
 	nextNoPaddingY = false
 
 	currentListBox = ""
+
+	widgets = []widgets2.Widget{}
 }
 
 func endFrame(screen *ebiten.Image) {
 	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%v", mouse.current), 0, 20)
 
+	// Draw base frame
+	f.w = frameWidth
+	f.h = y - f.y
+
+	// Mid
+	opt := &ebiten.DrawImageOptions{}
+	opt.GeoM.Scale(f.w-2*cw, f.h-2*ch)
+	screen.DrawImage(mid, f.translateExisting(opt, 1, 1))
+
+	// Corners
+	screen.DrawImage(tl, f.translate(0, 0))
+	screen.DrawImage(bl, f.translate(2, 0))
+	screen.DrawImage(br, f.translate(2, 2))
+	screen.DrawImage(tr, f.translate(0, 2))
+
+	// Top
+	opt = &ebiten.DrawImageOptions{}
+	opt.GeoM.Scale(f.midWidth(), 1)
+	screen.DrawImage(t, f.translateExisting(opt, 0, 1))
+
+	// Left
+	opt = &ebiten.DrawImageOptions{}
+	opt.GeoM.Scale(1, f.midHeight())
+	screen.DrawImage(l, f.translateExisting(opt, 1, 0))
+
+	// Bottom
+	opt = &ebiten.DrawImageOptions{}
+	opt.GeoM.Scale(f.midWidth(), 1)
+	screen.DrawImage(b, f.translateExisting(opt, 2, 1))
+	//
+	// Right
+	opt = &ebiten.DrawImageOptions{}
+	opt.GeoM.Scale(1, f.midHeight())
+	screen.DrawImage(r, f.translateExisting(opt, 1, 2))
+
+	// Draw widgets
 	for _, w := range widgets {
 		w.Draw(screen)
 	}
-	widgets = []widgets2.Widget{}
 }
 
 func addWidget(w widgets2.Widget) {
