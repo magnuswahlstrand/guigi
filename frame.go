@@ -9,8 +9,8 @@ import (
 )
 
 const (
-	pTop  = 20 + 10
-	pLeft = 10
+	pTop       = 20 + 10
+	pLeft      = 10
 	frameWidth = 250
 	wHeight    = 20
 	wWidth     = 100
@@ -172,14 +172,16 @@ func allocateRect() gfx.Rect {
 }
 
 func allocateRectW(w float64) gfx.Rect {
-	r := gfx.R(0, 0, w, wHeight).Moved(gfx.V(x, y))
-	x += w + wPaddingX
-	return r
+	return allocateRectSize(w, wHeight)
 }
 
 func allocateRectH(h float64) gfx.Rect {
-	r := gfx.R(0, 0, wWidth, h).Moved(gfx.V(x, y))
-	x += wWidth + wPaddingX
+	return allocateRectSize(wWidth, h)
+}
+
+func allocateRectSize(w, h float64) gfx.Rect {
+	r := gfx.R(0, 0, w, h).Moved(gfx.V(x, y))
+	x += w + wPaddingX
 	return r
 }
 

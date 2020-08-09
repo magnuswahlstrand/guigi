@@ -18,6 +18,8 @@ type Game struct {
 	text1 string
 	c1    [4]float32
 	c2    [4]float32
+
+	enabled bool
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -31,7 +33,7 @@ func (g *Game) Update(_ *ebiten.Image) error {
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
-	imgui2.BeginFrame(300,100)
+	imgui2.BeginFrame(300, 100)
 
 	if imgui2.CollapsingHeader("experiment") {
 		if imgui2.Button("inside experiment") {
@@ -58,6 +60,16 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		fmt.Println("fire selected")
 	}
 	imgui2.EndListBox()
+
+	if imgui2.Button("button checkbox3") {
+		ebitenutil.DebugPrint(screen, "Button clicked")
+	}
+	if imgui2.Checkbox("Some Checkbox", &g.enabled) {
+		if imgui2.Button("button checkbox") {
+			ebitenutil.DebugPrint(screen, "Button clicked")
+		}
+	}
+
 	imgui2.EndFrame(screen)
 
 	g.manager.BeginFrame()
@@ -87,6 +99,17 @@ func (g *Game) Draw(screen *ebiten.Image) {
 			fmt.Println("Fire")
 		}
 	}
+
+	if imgui.Button("button checkbox2") {
+		ebitenutil.DebugPrint(screen, "Button clicked")
+	}
+
+	if imgui.Checkbox("Some Checkbox", &g.enabled) {
+		if imgui.Button("button checkbox") {
+			ebitenutil.DebugPrint(screen, "Button clicked")
+		}
+	}
+
 	g.manager.EndFrame(screen)
 }
 
@@ -108,6 +131,8 @@ func main() {
 
 		c1: [4]float32{1, 1, 1, 1},
 		c2: [4]float32{1, 1, 1, 1},
+
+		enabled: true,
 	}
 
 	ebiten.RunGame(g)

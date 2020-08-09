@@ -135,21 +135,35 @@ func DragFloatV(label string, v *float64, stepSize float64, min, max *float64) b
 	return dragged && mouse.Dragged()
 }
 
-func Button(label string) bool {
-	bb := text2.BoundingBoxFromString(label, text.DefaultFont)
-	r := allocateRectW(bb.W() + 8)
-	over, startedIn, isPressed, isHovered := mouse.MouseState(r)
+func Checkbox(label string, val *bool) bool {
+	r := allocateRectSize(15, 15)
+	s := mouse.MouseStateRect(r)
 
-	w := &widgets2.Button{
+	up := s.Up()
+	if up {
+		*val = !*val
+	}
+
+	w := &widgets2.Checkbox{
 		Label: label,
 		Rect:  r,
 
-		Pressed: isPressed,
-		Hovered: isHovered,
+		Checked: *val,
+		Hovered: s.Hovered(),
 	}
+	sameLine()
 	addWidget(w)
 
-	return mouse.JustReleased() && over && startedIn
+	// Add label
+	x, y := allocateXY()
+	l := &widgets2.Label{
+		Label: label,
+		X:     x + wPaddingX,
+		Y:     y - 2, // TODO: hard coding
+	}
+	addWidget(l)
+
+	return *val
 }
 
 func CollapsingHeader(label string) bool {
@@ -226,4 +240,21 @@ func Selectable(itemLabel string) bool {
 	addWidget(w)
 
 	return s.Up()
+}
+
+func Button(label string) bool {
+	bb := text2.BoundingBoxFromString(label, text.DefaultFont)
+	r := allocateRectW(bb.W() + 8)
+	over, startedIn, isPressed, isHovered := mouse.MouseState(r)
+
+	w := &widgets2.Button{
+		Label: label,
+		Rect:  r,
+
+		Pressed: isPressed,
+		Hovered: isHovered,
+	}
+	addWidget(w)
+
+	return mouse.JustReleased() && over && startedIn
 }
