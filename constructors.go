@@ -88,7 +88,10 @@ func tryUpdateInput(variable *string) bool {
 }
 
 func DragFloat(label string, v *float64) bool {
-	stepSize := 0.1
+	return DragFloatV(label, v, 0.1, nil, nil)
+}
+
+func DragFloatV(label string, v *float64, stepSize float64, min, max *float64) bool {
 	r := allocateRect()
 
 	s := mouse.MouseStateRect(r)
@@ -98,6 +101,13 @@ func DragFloat(label string, v *float64) bool {
 	if dragged && mouse.Dragged() {
 		diff := mouse.DiffToCurrent().X - mouse.DiffToPrevious().X
 		*v += stepSize * diff
+
+		if max != nil && *v > *max {
+			*v = *max
+		}
+		if min != nil && *v < *min {
+			*v = *min
+		}
 	}
 
 	w := &widgets2.DragFloat{
