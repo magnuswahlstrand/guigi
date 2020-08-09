@@ -6,7 +6,7 @@
 // mask_topleft.png
 // DO NOT EDIT!
 
-package imgui
+package guigi
 
 import (
 	"bytes"

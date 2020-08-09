@@ -1,4 +1,4 @@
-package imgui
+package guigi
 
 import (
 	"github.com/hajimehoshi/ebiten"
