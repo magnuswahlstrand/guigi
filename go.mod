@@ -1,4 +1,4 @@
-module github.com/kyeett/gooigi
+module github.com/kyeett/guigi
 
 go 1.14
 

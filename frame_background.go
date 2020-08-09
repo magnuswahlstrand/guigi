@@ -1,14 +1,12 @@
-package main
+package imgui
 
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/kyeett/games/util"
-	"github.com/kyeett/gooigi/cmd/constants"
+	"github.com/kyeett/guigi/constants"
 )
 
 var (
-	//maskCorner   *ebiten.Image
-	//borderCorner *ebiten.Image
 	tl *ebiten.Image
 	tr *ebiten.Image
 	br *ebiten.Image

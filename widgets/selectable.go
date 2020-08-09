@@ -3,27 +3,27 @@ package widgets
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/kyeett/gooigi/cmd/constants"
-	"github.com/kyeett/gooigi/cmd/text"
+	"github.com/kyeett/guigi/constants"
+	"github.com/kyeett/guigi/text"
 	"github.com/peterhellberg/gfx"
 )
 
-var _ Widget = &Button{}
+var _ Widget = &Selectable{}
 
-type Button struct {
+type Selectable struct {
 	Label string
 	Rect  gfx.Rect
 
-	Pressed bool
-	Hovered bool
+	Selected bool
+	Hovered  bool
 }
 
-func (w *Button) Draw(screen *ebiten.Image) {
+func (w *Selectable) Draw(screen *ebiten.Image) {
 	switch {
-	case w.Pressed:
-		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorPressedBlue)
 	case w.Hovered:
 		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorHoveredBlue)
+	case w.Selected:
+		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorPressedBlue)
 	default:
 		ebitenutil.DrawRect(screen, w.Rect.Min.X, w.Rect.Min.Y, w.Rect.W(), w.Rect.H(), constants.ColorBlue)
 	}

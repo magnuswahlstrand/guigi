@@ -3,7 +3,7 @@ package widgets
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
-	"github.com/kyeett/gooigi/cmd/constants"
+	"github.com/kyeett/guigi/constants"
 	"github.com/peterhellberg/gfx"
 )
 

@@ -4,8 +4,8 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	text2 "github.com/kyeett/games/util/text"
-	"github.com/kyeett/gooigi/cmd/constants"
-	"github.com/kyeett/gooigi/cmd/text"
+	"github.com/kyeett/guigi/constants"
+	"github.com/kyeett/guigi/text"
 	"github.com/peterhellberg/gfx"
 	"golang.org/x/image/colornames"
 )

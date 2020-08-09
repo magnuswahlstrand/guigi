@@ -1,12 +1,25 @@
-package main
+package imgui
 
 import (
-	"fmt"
 	"github.com/hajimehoshi/ebiten"
-	"github.com/hajimehoshi/ebiten/ebitenutil"
-	widgets2 "github.com/kyeett/gooigi/cmd/widgets"
+	"github.com/kyeett/guigi/mouse"
+	widgets2 "github.com/kyeett/guigi/widgets"
 	"github.com/peterhellberg/gfx"
 	"log"
+)
+
+const (
+	pTop  = 20 + 10
+	pLeft = 10
+	// TODO: Used during prototyping, should be removed
+	devOffsetX = 300
+	devOffsetY = 100
+	frameWidth = 250
+	wHeight    = 20
+	wWidth     = 100
+
+	wPaddingY = 5
+	wPaddingX = 1
 )
 
 func nextLine() {
@@ -81,7 +94,7 @@ func (d *frameDimensions) midHeight() float64 {
 
 var f frameDimensions
 
-func newFrame() {
+func NewFrame() {
 	x = devOffsetX
 	y = devOffsetY
 	f.x = x
@@ -99,11 +112,11 @@ func newFrame() {
 	currentListBox = ""
 
 	widgets = []widgets2.Widget{}
+
+	mouse.Update()
 }
 
-func endFrame(screen *ebiten.Image) {
-	ebitenutil.DebugPrintAt(screen, fmt.Sprintf("%v", mouse.current), 0, 20)
-
+func EndFrame(screen *ebiten.Image) {
 	// Draw base frame
 	f.w = frameWidth
 	f.h = y - f.y

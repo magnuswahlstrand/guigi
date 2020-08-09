@@ -6,11 +6,7 @@ import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/ebitenutil"
 	"github.com/inkyblackness/imgui-go/v2"
-)
-
-var (
-	x, y  float64
-	mouse Mouse
+	imgui2 "github.com/kyeett/guigi"
 )
 
 type Game struct {
@@ -29,44 +25,40 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func (g *Game) Update(_ *ebiten.Image) error {
-	mouse.update()
-	updatePressedCharacters()
+	imgui2.UpdatePressedCharacters()
 	g.manager.Update(float32(0.1), windowWidth, windowHeight)
 	return nil
 }
 
-var keysPressed string
-
 func (g *Game) Draw(screen *ebiten.Image) {
-	newFrame()
+	imgui2.NewFrame()
 
-	if UiCollapsingHeader("experiment") {
-		if UiButton("inside experiment") {
+	if imgui2.UiCollapsingHeader("experiment") {
+		if imgui2.UiButton("inside experiment") {
 			ebitenutil.DebugPrint(screen, "Button clicked")
 		}
 	}
 
-	if UiInputText("some label2", &g.text1) {
+	if imgui2.UiInputText("some label2", &g.text1) {
 		fmt.Println("label2 changed", g.text1)
 	}
-	if UiButton("button") {
+	if imgui2.UiButton("button") {
 		ebitenutil.DebugPrint(screen, "Button clicked")
 	}
 
-	if UiDragFloat("my float", &g.floatVar64) {
+	if imgui2.UiDragFloat("my float", &g.floatVar64) {
 		ebitenutil.DebugPrint(screen, "Slider moved")
 	}
 
-	UiBeginListBox("my list box")
-	if UiSelectable("pulsating dot") {
+	imgui2.UiBeginListBox("my list box")
+	if imgui2.UiSelectable("pulsating dot") {
 		fmt.Println("pulsating dot selected")
 	}
-	if UiSelectable("fire") {
+	if imgui2.UiSelectable("fire") {
 		fmt.Println("fire selected")
 	}
-	UiEndListBox()
-
-	endFrame(screen)
+	imgui2.UiEndListBox()
+	imgui2.EndFrame(screen)
 
 	g.manager.BeginFrame()
 	if imgui.CollapsingHeader("experiment") {
@@ -101,20 +93,6 @@ func (g *Game) Draw(screen *ebiten.Image) {
 const (
 	windowWidth  = 800
 	windowHeight = 600
-)
-
-const (
-	pTop  = 20 + 10
-	pLeft = 10
-	// TODO: Used during prototyping, should be removed
-	devOffsetX = 300
-	devOffsetY = 100
-	frameWidth = 250
-	wHeight    = 20
-	wWidth     = 100
-
-	wPaddingY = 5
-	wPaddingX = 1
 )
 
 func main() {

@@ -1,10 +1,12 @@
-package main
+package imgui
 
 import (
 	"github.com/hajimehoshi/ebiten"
 )
 
 var (
+	x, y float64
+
 	focusedLabel = ""
 
 	blinkingTimer = 0
@@ -21,6 +23,8 @@ var (
 
 	currentListBox      = ""
 	currentListBoxIndex = -1
+
+	keysPressed string
 )
 
 func getCurrentIndex() int {
@@ -53,7 +57,7 @@ func isFocused(label string) bool {
 	return label == focusedLabel
 }
 
-func updatePressedCharacters() {
+func UpdatePressedCharacters() {
 	keysPressed = ""
 	for _, r := range ebiten.InputChars() {
 		keysPressed += string(r)

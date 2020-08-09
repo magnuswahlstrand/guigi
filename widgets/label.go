@@ -2,7 +2,7 @@ package widgets
 
 import (
 	"github.com/hajimehoshi/ebiten"
-	"github.com/kyeett/gooigi/cmd/text"
+	"github.com/kyeett/guigi/text"
 )
 
 var _ Widget = &Label{}

@@ -1,24 +1,25 @@
-package main
+package imgui
 
 import (
 	"github.com/hajimehoshi/ebiten"
 	"github.com/hajimehoshi/ebiten/inpututil"
 	text2 "github.com/kyeett/games/util/text"
-	"github.com/kyeett/gooigi/cmd/text"
-	widgets2 "github.com/kyeett/gooigi/cmd/widgets"
+	"github.com/kyeett/guigi/mouse"
+	"github.com/kyeett/guigi/text"
+	widgets2 "github.com/kyeett/guigi/widgets"
 )
 
 func UiInputText(label string, variable *string) bool {
 	r := allocateRect()
 	//_, _, isPressed, _ := mouseState(r)
-	s := mouseStateRect(r)
+	s := mouse.MouseStateRect(r)
 
 	// Check if widget clicked this turn
 
 	switch {
-	case s.pressed():
+	case s.Pressed():
 		setFocused(label)
-	case mouse.justPressed: //&& s.pressed(): This is already implicit by previous case
+	case mouse.JustPressed(): //&& s.pressed(): This is already implicit by previous case
 		setUnfocused(label)
 	}
 
@@ -90,12 +91,12 @@ func UiDragFloat(label string, v *float64) bool {
 	stepSize := 0.1
 	r := allocateRect()
 
-	_, startedIn, _, isHovered := mouseState(r)
-	dragged := mouse.pressed && startedIn
+	s := mouse.MouseStateRect(r)
+	dragged := mouse.Dragged() && s.StartedIn()
 
 	// Update if needed
-	if dragged && mouse.dragged {
-		diff := mouse.diffToCurrent().X - mouse.diffToPrevious().X
+	if dragged && mouse.Dragged() {
+		diff := mouse.DiffToCurrent().X - mouse.DiffToPrevious().X
 		*v += stepSize * diff
 	}
 
@@ -107,7 +108,7 @@ func UiDragFloat(label string, v *float64) bool {
 		Format:   "%0.2f",
 
 		Active:  dragged,
-		Hovered: isHovered,
+		Hovered: s.Hovered(),
 	}
 	sameLine()
 	addWidget(w)
@@ -121,13 +122,13 @@ func UiDragFloat(label string, v *float64) bool {
 	}
 	addWidget(l)
 
-	return dragged && mouse.dragged
+	return dragged && mouse.Dragged()
 }
 
 func UiButton(label string) bool {
 	bb := text2.BoundingBoxFromString(label, text.DefaultFont)
 	r := allocateRectW(bb.W() + 8)
-	over, startedIn, isPressed, isHovered := mouseState(r)
+	over, startedIn, isPressed, isHovered := mouse.MouseState(r)
 
 	w := &widgets2.Button{
 		Label: label,
@@ -138,18 +139,17 @@ func UiButton(label string) bool {
 	}
 	addWidget(w)
 
-	return mouse.justReleased && over && startedIn
+	return mouse.JustReleased() && over && startedIn
 }
 
 func UiCollapsingHeader(label string) bool {
 	r := allocateRect()
-	over, startedIn, _, isHovered := mouseState(r)
+	//over, startedIn, _, isHovered := mouse.MouseStateRect(r)
+	s := mouse.MouseStateRect(r)
 
 	// Update state if just clicked
 	expanded := isActive("CollapsingHeader", label)
-
-	mouseUp := mouse.justReleased && over && startedIn
-	if mouseUp {
+	if s.Up() {
 		if expanded {
 			expanded = false
 		} else {
@@ -162,7 +162,7 @@ func UiCollapsingHeader(label string) bool {
 	w := &widgets2.CollapsingHeader{
 		Label:     label,
 		Rect:      r,
-		Hovered:   isHovered,
+		Hovered:   s.Hovered(),
 		Collapsed: !expanded,
 	}
 	addWidget(w)
@@ -195,10 +195,10 @@ func UiSelectable(itemLabel string) bool {
 	r := allocateRect()
 
 	// Get current state
-	s := mouseStateRect(r)
+	s := mouse.MouseStateRect(r)
 
 	// Update selected
-	if s.up() {
+	if s.Up() {
 		setSelectedIndex("ListBox", currentListBox, index)
 	}
 
@@ -210,10 +210,10 @@ func UiSelectable(itemLabel string) bool {
 		Rect:  r,
 
 		Selected: selected,
-		Hovered:  s.hovered(),
+		Hovered:  s.Hovered(),
 	}
 	noPaddingY()
 	addWidget(w)
 
-	return s.up()
+	return s.Up()
 }
